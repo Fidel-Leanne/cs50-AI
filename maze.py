@@ -87,7 +87,7 @@ class Maze():
         for i, row in enumerate(self.walls):
             for j, col in enumerate(row):
                 if col:
-                    print("â–ˆ", end="")
+                    print("█", end="")
                 elif (i, j) == self.start:
                     print("A", end="")
                 elif (i, j) == self.goal:
@@ -214,9 +214,9 @@ class Maze():
 
         img.save(filename)
 
+
 if len(sys.argv) != 2:
     sys.exit("Usage: python maze.py maze.txt")
-    
 
 m = Maze(sys.argv[1])
 print("Maze:")
