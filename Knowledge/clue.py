@@ -23,7 +23,7 @@ symbols = characters + rooms + weapons
 def check_knowledge(knowledge):
     for symbol in symbols:
         if model_check(knowledge, symbol):
-            termcolor.cprint(f"{symbol}: YES", "green")
+            termcolor.cprint(f"{symbol}: YES", "red")
         elif not model_check(knowledge, Not(symbol)):
             print(f"{symbol}: MAYBE")
 
@@ -34,6 +34,10 @@ knowledge = And(
     Or(ballroom, kitchen, library),
     Or(knife, revolver, wrench)
 )
+
+termcolor.cprint(knowledge.formula(),"white")
+
+check_knowledge(knowledge)
 
 # Initial cards
 knowledge.add(And(
