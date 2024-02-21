@@ -1,24 +1,32 @@
-from pomegranate import *
+
+from sympy.stats.drv import DiscreteDistribution
+
+# Rest of your code remains the same
+
 
 # Rain node has no parents
-rain = Node(DiscreteDistribution({
+rain = DiscreteDistribution({
     "none": 0.7,
     "light": 0.2,
     "heavy": 0.1
-}), name="rain")
+})
 
 # Track maintenance node is conditional on rain
-maintenance = Node(ConditionalProbabilityTable([
+class ConditionalProbabilityTable:
+    pass
+
+
+maintenance = ConditionalProbabilityTable([
     ["none", "yes", 0.4],
     ["none", "no", 0.6],
     ["light", "yes", 0.2],
     ["light", "no", 0.8],
     ["heavy", "yes", 0.1],
     ["heavy", "no", 0.9]
-], [rain.distribution]), name="maintenance")
+], [rain])
 
 # Train node is conditional on rain and maintenance
-train = Node(ConditionalProbabilityTable([
+train = ConditionalProbabilityTable([
     ["none", "yes", "on time", 0.8],
     ["none", "yes", "delayed", 0.2],
     ["none", "no", "on time", 0.9],
@@ -31,17 +39,21 @@ train = Node(ConditionalProbabilityTable([
     ["heavy", "yes", "delayed", 0.6],
     ["heavy", "no", "on time", 0.5],
     ["heavy", "no", "delayed", 0.5],
-], [rain.distribution, maintenance.distribution]), name="train")
+], [rain, maintenance])
 
 # Appointment node is conditional on train
-appointment = Node(ConditionalProbabilityTable([
+appointment = ConditionalProbabilityTable([
     ["on time", "attend", 0.9],
     ["on time", "miss", 0.1],
     ["delayed", "attend", 0.6],
     ["delayed", "miss", 0.4]
-], [train.distribution]), name="appointment")
+], [train])
 
 # Create a Bayesian Network and add states
+class BayesianNetwork:
+    pass
+
+
 model = BayesianNetwork()
 model.add_states(rain, maintenance, train, appointment)
 
