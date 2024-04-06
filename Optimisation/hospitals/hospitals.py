@@ -192,7 +192,7 @@ class Space():
 
 
 # Create a new space and add houses randomly
-s = Space(height=5, width=20, num_hospitals=3)
+s = Space(height=2, width=10, num_hospitals=3)
 for i in range(15):
     s.add_house(random.randrange(s.height), random.randrange(s.width))
 

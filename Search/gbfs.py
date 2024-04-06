@@ -1,6 +1,6 @@
 from queue import PriorityQueue
 
-def gbfs(graph, start, goal, heuristic):
+def gbfs(graph, start, goal, heuristic) -> Literal['Goal found!', 'Goal not reachable.']:
     visited = set()
     priority_queue = PriorityQueue()
 
