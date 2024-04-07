@@ -1,55 +1,14 @@
-# from queue import PriorityQueue
-
-# def astar(graph, start, goal, heuristic):
-#     visited = set()
-#     priority_queue = PriorityQueue()
-
-#     priority_queue.put((0 + heuristic[start], 0, start))  # Corrected this line
-
-#     while not priority_queue.empty():
-#         current_cost, current_node = priority_queue.get()[1:]
-
-#         if current_node == goal:
-#             return "Goal found!"
-
-#         if current_node not in visited:
-#             visited.add(current_node)
-
-#             # Expand neighbors and enqueue them based on cost and heuristic
-#             for neighbor, cost in graph[current_node].items():
-#                 if neighbor not in visited:
-#                     new_cost = current_cost + cost
-#                     priority_queue.put((new_cost + heuristic[neighbor], new_cost, neighbor))  # Corrected this line
-
-#     return "Goal not reachable."
-
-# # Example usage (unchanged):
-# graph = {
-#     'A': {'B': 2, 'E': 4},
-#     'B': {'A': 2, 'C': 3, 'E': 1},
-#     'C': {'B': 3, 'D': 1},
-#     'D': {'C': 1},
-#     'E': {'A': 4, 'B': 1}
-# }
-
-# heuristic = {'A': 5, 'B': 3, 'C': 2, 'D': 1, 'E': 4}
-
-# start_node = 'A'
-# goal_node = 'B'
-
-# result_astar = astar(graph, start_node, goal_node, heuristic)
-# print(result_astar)
 import pygame
 import math
 from queue import PriorityQueue
 
-WIDTH = 500
+WIDTH = 600
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
 pygame.display.set_caption("A* Path Finding Algorithm")
 
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
-BLUE = (0, 255, 0)
+BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -57,6 +16,7 @@ PURPLE = (128, 0, 128)
 ORANGE = (255, 165 ,0)
 GREY = (128, 128, 128)
 TURQUOISE = (64, 224, 208)
+CYAN = (0, 255, 255)
 
 class Spot:
 	def __init__(self, row, col, width, total_rows):
@@ -64,7 +24,7 @@ class Spot:
 		self.col = col
 		self.x = row * width
 		self.y = col * width
-		self.color = WHITE
+		self.color = CYAN
 		self.neighbors = []
 		self.width = width
 		self.total_rows = total_rows
@@ -85,7 +45,7 @@ class Spot:
 		return self.color == ORANGE
 
 	def is_end(self):
-		return self.color == TURQUOISE
+		return self.color == BLUE
 
 	def reset(self):
 		self.color = WHITE
@@ -103,7 +63,7 @@ class Spot:
 		self.color = BLACK
 
 	def make_end(self):
-		self.color = TURQUOISE
+		self.color = BLUE
 
 	def make_path(self):
 		self.color = PURPLE
@@ -144,7 +104,7 @@ def reconstruct_path(came_from, current, draw):
         draw()
 
     path.reverse()  # Reverse the path to print it in the correct order
-    print("Path found:", path)  # Print the path
+    print("Path Cordinates:", path)  # Print the path
 
 
 
@@ -239,7 +199,7 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-	ROWS = 30
+	ROWS = 20
 	grid = make_grid(ROWS, width)
 
 	start = None
@@ -254,21 +214,21 @@ def main(win, width):
 
 			if pygame.mouse.get_pressed()[0]: # LEFT
 				pos = pygame.mouse.get_pos()
+				print("Left Click Position:", pos)  # Debugging print statement
 				row, col = get_clicked_pos(pos, ROWS, width)
 				spot = grid[row][col]
 				if not start and spot != end:
 					start = spot
 					start.make_start()
-
 				elif not end and spot != start:
 					end = spot
 					end.make_end()
-
 				elif spot != end and spot != start:
 					spot.make_barrier()
 
 			elif pygame.mouse.get_pressed()[2]: # RIGHT
 				pos = pygame.mouse.get_pos()
+				print("Right Click Position:", pos)  # Debugging print statement
 				row, col = get_clicked_pos(pos, ROWS, width)
 				spot = grid[row][col]
 				spot.reset()
@@ -278,17 +238,16 @@ def main(win, width):
 					end = None
 
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_SPACE and start and end:
+				if (event.key == pygame.K_SPACE or event.key == pygame.K_RETURN) and start and end:
 					for row in grid:
 						for spot in row:
 							spot.update_neighbors(grid)
-
 					algorithm(lambda: draw(win, grid, ROWS, width), grid, start, end)
-
 				if event.key == pygame.K_c:
 					start = None
 					end = None
 					grid = make_grid(ROWS, width)
+
 
 	pygame.quit()
 
